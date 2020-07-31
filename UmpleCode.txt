@@ -1,0 +1,170 @@
+// UML state diagram of a pharmacy prescription
+// Author Rakan Al Tamimi
+
+class PharmacyPrescription
+{
+  String doctorPrescribing = new String("blank");  //Name of doctor prescribing
+  String drugName = new String("blank");            //Name of drug prescribed
+  int quantity = 0;                                 //Quantity prescribed
+  int refills = 0;                                     //Number of refills prescribed
+  String sig = new String("blank");                      //Specific directions for use of medication
+  
+  boolean cancel = false;
+  boolean  confirm = false;
+  boolean cancelUnfill = false;
+  boolean rebill = false;
+  boolean refill = false;
+  boolean reinput = false;
+  boolean modify = false;
+  boolean hold = false;
+   
+    
+  status
+  {
+    Input { 
+      entry / {
+      setReinput(false);
+      inputFunction();
+    }
+      cancel / {setCancel(true);}-> Cancelled;
+      confirm / {setConfirm(true);}-> Adjudicate;
+    }
+    Adjudicate{ 
+      entry / {
+      setConfirm(false);
+      setRebill(false);
+      billingFunction();
+      }
+      confirm / {setConfirm(true);}-> Filling;
+      reBillChanges / {setRebill(true);}-> Adjudicate;
+      modifyInput / {setModify(true);}-> Input;
+      cancelUnfill / {setCancelUnfill(true);}-> Hold;
+      cancel / {setCancel(true);}-> Cancelled;
+     }
+    Filling{
+      entry / {
+      setRefill(false);
+      setConfirm(false);
+      printPrescription();
+      }
+      confirm / {setConfirm(true);}-> PharmacistCheck;
+      cancelUnfill / {setCancelUnfill(true);}-> Hold;
+      cancel / {setCancel(true);}-> Cancelled;
+    }
+    PharmacistCheck{
+      entry / {
+      setConfirm(false);
+      printPrescription();
+      }
+      confirm / {setConfirm(true);}-> WaitingForPickup;
+      cancel / {setCancel(true);}-> Cancelled;
+      cancelUnfill / {setCancelUnfill(true);}->Hold;
+      rebill / {setRebill(true);}-> Adjudicate;
+      refill / {setRefill(true);}-> Filling;
+      reinput / {setReinput(true);}-> Input;
+    }
+    Cancelled { 
+      entry / {
+      setCancel(false);
+      cancelPrescription();
+      }
+    }
+    Hold{
+      entry /{
+      setCancelUnfill(false);
+      holdPrescription();
+      }
+    }
+    WaitingForPickup{
+      entry /{
+      setConfirm(false);
+      pickUp();
+      }
+    }
+  }
+  
+  public void inputFunction(){               //Function to input prescription values
+    
+    Scanner sc= new Scanner(System.in);   
+    System.out.println("Enter Name of Doctor: ");  
+    String str= sc.nextLine();
+    doctorPrescribing = str;
+    
+    System.out.println("Enter the name of the medication prescribed: ");
+    str= sc.nextLine();
+    drugName = str;
+    
+    System.out.println("Enter quantity prescribed:");
+    str= sc.nextLine();
+    quantity = Integer.parseInt(str);
+    
+    System.out.println("Enter number of refills:");
+    str= sc.nextLine();
+    refills = Integer.parseInt(str);
+    
+    System.out.println("Enter the instructions on use provided by MD:");
+    str= sc.nextLine();
+    sig = str;
+    
+    }
+  public void billingFunction(){
+    System.out.println("Billing insurance companies....");
+    System.out.println("Insurance accepted. Patient owes $4.00");
+  }
+  public void printPrescription(){
+    System.out.println("Doctor: " + doctorPrescribing);
+    System.out.println("Drug Name: " + drugName);
+    System.out.println("Quantity: " + quantity);
+    System.out.println("Number of Refills: " + refills);
+    System.out.println("Sig: " + sig);
+  } 
+  public void cancelPrescription(){
+    System.out.println("Prescription cancelled.");
+  }
+  public void holdPrescription(){
+    System.out.println("Presciption placed on hold.");
+  }
+  public void pickUp(){
+    System.out.println("Prescription has been prepared. Ready for pickup.");
+  }
+  
+  public static void main(String args[]){
+    System.out.println("--- Test 1: create prescription then cancel.--- ");
+    PharmacyPrescription test1 = new PharmacyPrescription();
+    test1.cancel(); //cancel
+    System.out.println("-- Test 1 concluded. ---"); 
+   
+    System.out.println("--- Test 2: create a prescription and bill it, then cancel. ---");
+    PharmacyPrescription test2 = new PharmacyPrescription();
+    test2.confirm();  //go to adjudicate
+    test2.cancel();   //cancel
+    System.out.println("-- Test 2 concluded. ---"); 
+    
+    System.out.println("--- Test 3: create a prescription and bill it, then cancel in the filling stage. ---");
+    PharmacyPrescription test3 = new PharmacyPrescription();
+    test3.confirm();  //go to adjudicate
+    test3.confirm();  //go to filling
+    test3.cancel();   //go to cancel
+    System.out.println("-- Test 3 concluded. ---");
+    
+    System.out.println("--- Test 4: create a prescription and follow till drop off. ---");
+    PharmacyPrescription test4 = new PharmacyPrescription();
+    test4.confirm();  //go to adjudicate
+    test4.confirm();  //go to filling
+    test4.confirm();  //go to pharmacist check
+    test4.confirm();  //go to Waiting for Pickup
+    System.out.println("-- Test 4 concluded. ---");
+    
+    System.out.println("--- Test 5: create a prescription and has the pharmacist rebill, refill, then drop off. ---");
+    PharmacyPrescription test5 = new PharmacyPrescription();
+    test5.confirm(); //adjudicate
+    test5.confirm();  //filling
+    test5.confirm(); //pharmacist check
+    test5.rebill();     //back to adjudicate to rebill
+    test5.confirm(); //filling 
+    test5.confirm(); //pharmacist check
+    test5.confirm(); // ready for pick up
+    System.out.println("-- Test 5 concluded. ---");
+  }
+  
+}
