@@ -3,6 +3,7 @@
 
 class PharmacyPrescription
 {
+  String patientName = new String("blank");
   String doctorPrescribing = new String("blank");  //Name of doctor prescribing
   String drugName = new String("blank");            //Name of drug prescribed
   int quantity = 0;                                 //Quantity prescribed
@@ -89,7 +90,11 @@ class PharmacyPrescription
     System.out.println("Enter Name of Doctor: ");  
     String str= sc.nextLine();
     doctorPrescribing = str;
-    
+
+    System.out.println("Enter the name of Patient");
+    str = sc.nextLine();
+    patientName = str;    
+
     System.out.println("Enter the name of the medication prescribed: ");
     str= sc.nextLine();
     drugName = str;
@@ -112,6 +117,7 @@ class PharmacyPrescription
     System.out.println("Insurance accepted. Patient owes $4.00");
   }
   public void printPrescription(){
+    System.out.println("Patient: " + patientName);
     System.out.println("Doctor: " + doctorPrescribing);
     System.out.println("Drug Name: " + drugName);
     System.out.println("Quantity: " + quantity);

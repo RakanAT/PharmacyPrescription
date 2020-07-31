@@ -42,6 +42,32 @@ the state diagram. The console input is primarily for inputting the prescription
 In order to run the test program, download the java file PharmacyPrescription.java and compile it then run it.
 It will prompt you to input information for the prescription and then will run a test for the prescription.
 
+I'd like to discuss some limitations I encountered. In the billing function, its supposed to use the patient file that
+the prescription is associated with in order to send the bill to the insurance company. However, I have replaced this
+with a constant function that just prints out messages saying the insurance is accepted and the patient owes $4.00.
+This was done in order to demonstrate the adjudication state only. Additionally the code lacks the patient files,
+it would be important to adjust the input state in order to find the corresponding patient and attach the prescription
+to his file. 
+
+Due to the lack of functionality of the system I would like to remind anyone who would like to build on this project
+that they should add functionality to the existing components. For example the input state can be expanded on by adding
+a function to search through a list of patients and add the prescription to that patient's file. Additionally, once
+a patient class is added, the adjudicate function would be able to access patient information to contact insurance companies.
+Additionally the adjudicate functionality could be expanded by adding a client server framework in order to initiate actual
+comminucations with insurance servers to do automatic billing. This can be added without changing other features of the system.
+
+Overall, the software process is quite rigorous, as it is quite a process to develop the needs of the software based on 
+user requirements. Constructing the software in an agile and flexible manner is almost necessary since there are so
+many expected features to implement and it can get confusing. I thought I could develop much more than actuality and
+this is because I underestimated the work. I have taken Dr. Lethbridge's advice in that I designed a minimalistic barebones
+system to demonstrate functionality. I found this project to be quite exciting for myself and helped me learn a lot.
+
+
+IMPORTANT NOTE FOR VIDEO:
+I have attempted to record my screen multiple times, but the voice just keeps cutting out. I have included the video, but
+halfway through my voice cuts out. I tried multiple recordings, I'm only left to believe my microphone is not working properly
+on the hardware level. 
+
 
 
 
